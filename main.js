@@ -1,16 +1,46 @@
 const API_KEY = `230f1fb4e9f84766874e11aa6aa765d0`;
 let newsList = [];
+const menus = document.querySelectorAll(".menus button");
+menus.forEach((menu) =>
+  menu.addEventListener("click", (event) => getNewsbyCategory(event))
+);
 
 const getLatesNews = async () => {
   const url = new URL(
-    `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`
-    // `https://noona-times-be-5ca9402f90d9.herokuapp.com/top-headlines?country=kr&pageSize=${8}` //누나스터디용 url 세팅
+    // `https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}`
+    `https://noona-times-be-5ca9402f90d9.herokuapp.com/top-headlines?country=kr&pageSize=${8}` //누나스터디용 url 세팅
   );
   const response = await fetch(url);
   const data = await response.json();
   newsList = data.articles;
   render();
-  console.log("data", newsList);
+  // console.log("data", newsList);
+};
+
+const getNewsbyCategory = async (event) => {
+  const category = event.target.textContent.toLowerCase();
+  console.log("category", category);
+  const url = new URL(
+    `https://noona-times-be-5ca9402f90d9.herokuapp.com/top-headlines?country=kr&category=${category}&pageSize=${8}` //누나스터디용 url 세팅
+    // `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`
+  );
+  const response = await fetch(url);
+  const data = await response.json();
+  // console.log("data", data);
+  newsList = data.articles;
+  render();
+};
+
+const getNewsByKeyword = async () => {
+  const keyword = document.getElementById("search-input").value;
+  // console.log("keyword", keyword);
+  const url = new URL(
+    `https://noona-times-be-5ca9402f90d9.herokuapp.com/top-headlines?country=kr&q=${keyword}&pageSize=${8}` //누나스터디용 url 세팅
+    // `https://newsapi.org/v2/top-headlines?country=us&q=${keyword}&apiKey=${API_KEY}`
+  );
+  const response = await fetch(url);
+  const data = await response.json();
+  console.log("keyword data", data);
 };
 
 const render = () => {
